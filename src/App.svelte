@@ -1,47 +1,39 @@
-<script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+<script>
+  import "./app.css";
+  import Login from "./lib/Login.svelte";
+  import { currentUser } from "./lib/pocketbase";
+  import * as Card from "$lib/components/ui/card";
+  import AnimeList from "$lib/AnimeList.svelte";
 </script>
 
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+  <div class=" flex justify-center items-center content-center">
+    <div class="image"></div>
+    <Card.Root>
+      <Card.Header class="text-center">
+        <Card.Title>Track and Manage your Anime and Manga Collection</Card.Title
+        >
+        <Card.Description>Built using Svelte and Pocketbase</Card.Description>
+      </Card.Header>
+      <Card.Content>
+        <Login></Login>
+      </Card.Content>
+      <Card.Footer></Card.Footer>
+    </Card.Root>
   </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  {#if $currentUser}
+    <div class="flex justify-center items-center overflow-visible"></div>
+    <AnimeList></AnimeList>
+  {/if}
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
+  .image {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    background-image: url("https://external-preview.redd.it/6NSAwHardEpPu3I6cbwfNmYYlj8SXKzkdP7XJ1AnWmA.jpg?auto=webp&s=f8fb70a39ceff6c217b7e22ad1e6fed66b328da9");
+    z-index: -1;
   }
 </style>
