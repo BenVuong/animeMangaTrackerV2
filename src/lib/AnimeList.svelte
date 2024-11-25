@@ -5,6 +5,7 @@
   import Button from "./components/ui/button/button.svelte";
   import AnimeInfo from "./AnimeInfo.svelte";
   import AnimeEdit from "./AnimeEdit.svelte";
+  import AnimeCreate from "./AnimeCreate.svelte";
   let newMessage: string;
   let anime: any[] = [];
   let unsubscribe: () => void;
@@ -21,21 +22,16 @@
     unsubscribe = await pb
       .collection("anime")
       .subscribe("*", async ({ action, record }) => {
-        if (action === "create") {
+        if (action === "create" || action === "update") {
           // Fetch associated user
-          const user = await pb.collection("users").getOne(record.user);
-          record.expand = { user };
-          anime = [...anime, record];
-        }
-        if (action === "delete") {
-          anime = anime.filter((a) => a.id !== record.id);
-        }
-        if (action === "update") {
           const resultList = await pb.collection("anime").getList(1, 50, {
             sort: "title",
             expand: "users",
           });
           anime = resultList.items;
+        }
+        if (action === "delete") {
+          anime = anime.filter((a) => a.id !== record.id);
         }
       });
   });
@@ -55,25 +51,27 @@
   }
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-4">
-  {#each anime as anime (anime.id)}
-    <Card.Root>
-      <Card.Header>
-        <Card.Title>{anime.title}</Card.Title>
-        <Card.Description></Card.Description>
-      </Card.Header>
-      <Card.Content>
-        <p>Episodes Watched: {anime.episodeWatchedCount}</p>
-        <p>Total Episode Count: {anime.totalEpisodeCount}</p>
-        Type: {anime.type}
-      </Card.Content>
-      <Card.Footer>
-        <p>
-          <AnimeInfo {anime}></AnimeInfo><AnimeEdit {anime} /><Button
-            >Delete</Button
-          >
-        </p>
-      </Card.Footer>
-    </Card.Root>
-  {/each}
+<div>
+  <AnimeCreate></AnimeCreate>
+  <div class="grid grid-cols-1 md:grid-cols-4">
+    {#each anime as anime (anime.id)}
+      <Card.Root>
+        <Card.Header>
+          <Card.Title>{anime.title}</Card.Title>
+          <Card.Description></Card.Description>
+        </Card.Header>
+        <Card.Content>
+          <p>Episodes Watched: {anime.episodeWatchedCount}</p>
+          <p>Total Episode Count: {anime.totalEpisodeCount}</p>
+          Type: {anime.type}
+          <img alt="cover art" src={anime.coverArt} />
+        </Card.Content>
+        <Card.Footer>
+          <Button><AnimeInfo {anime}></AnimeInfo></Button><Button
+            ><AnimeEdit {anime} /></Button
+          ><Button>Delete</Button>
+        </Card.Footer>
+      </Card.Root>
+    {/each}
+  </div>
 </div>
