@@ -10,6 +10,6 @@
       <Dialog.Title>{anime.title}</Dialog.Title>
       <Dialog.Description></Dialog.Description>
     </Dialog.Header>
-    {anime.synopsis}
+    <pr>{anime.synopsis}</pr>
   </Dialog.Content>
 </Dialog.Root>

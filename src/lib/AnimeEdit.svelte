@@ -3,6 +3,7 @@
   import * as AlertDialog from "$lib/components/ui/alert-dialog";
   import Input from "./components/ui/input/input.svelte";
   import { currentUser, pb } from "./pocketbase";
+  import { Textarea } from "$lib/components/ui/textarea";
   let updatedEpisodeWatchedCount: number = anime.episodeWatchedCount;
   let updatedTotalEpisodeCount: number = anime.totalEpisodeCount;
   let id: string = anime.id;
@@ -41,10 +42,14 @@
       >
     </AlertDialog.Header>
     <form on:submit|preventDefault={editAnimeInfo}>
+      Title
+      <Input type="text" bind:value={updatedTitle} />
       Episodes Watched
       <Input type="number" bind:value={updatedEpisodeWatchedCount} />
       Total Episodes
       <Input type="number" bind:value={updatedTotalEpisodeCount} />
+      Synopsis
+      <Textarea bind:value={updatedSynopsis} />
       Studio
       <Input type="text" bind:value={updatedStudo} />
       Cover Art
